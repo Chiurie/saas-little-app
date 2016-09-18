@@ -31,7 +31,7 @@ public class Test {
 	
 	
 	public static void main(String[] args) {
-		ctx = new ClassPathXmlApplicationContext(new String[] { "spring/spring-*.xml" });
+		ctx = new ClassPathXmlApplicationContext(new String[] { "conf/spring/spring-*.xml" });
 		new Test();
 		String a = "测试Jar";
 		System.out.println(StringUtils.isNotBlank(a));
@@ -39,7 +39,7 @@ public class Test {
 		try {
 			for (int i =0;i < 100;i++) {
 				System.out.println(Config.ONE+":"+Config.SECOND+":"+Config.TIMEOUT);
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 				System.out.println(i+":Hello World!");	
 			}
 		} catch (InterruptedException e) {
