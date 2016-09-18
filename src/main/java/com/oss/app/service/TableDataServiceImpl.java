@@ -15,7 +15,7 @@ public class TableDataServiceImpl implements TableDataService{
 
 	
 	@Override
-	public List<Map<String,Object>> getTableList() {
+	public List<Map<String,Object>> getTableList(String starDate,String endDate) {
 		String sql = "select id,companyName from t_saas_company where createdDate < now() and status=0";
 		List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
 		return list;

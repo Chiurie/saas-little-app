@@ -7,7 +7,7 @@ public interface TableDataService {
 
 	
 	
-	List<Map<String,Object>> getTableList();
+	List<Map<String,Object>> getTableList(String starDate,String endDate);
 	
 	
 }

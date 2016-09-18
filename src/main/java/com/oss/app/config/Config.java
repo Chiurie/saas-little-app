@@ -9,10 +9,8 @@ import java.util.Properties;
 
 public class Config {
 	
-	public static final String ONE;
-	public static final String SECOND;
-	public static final String TIMEOUT;
 	public static final String BEGINDATE;
+	public static final String TEMPPATH;
 	
 	static Properties props = new Properties();
 	static{
@@ -23,9 +21,7 @@ public class Config {
 			e.printStackTrace();
 		}
 		
-		ONE = props.getProperty("one");
-		SECOND = props.getProperty("second");
-		TIMEOUT = props.getProperty("timeout");
+		TEMPPATH = props.getProperty("tempPath");
 		BEGINDATE = props.getProperty("beginDate");
 		
 	}
