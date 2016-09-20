@@ -47,25 +47,18 @@ public class Test {
 				JavaEmail email = new JavaEmail(false);
 				String subject = Config.BEGINDATE+"~"+endDate+"注册客户";
 			    String sendHtml = Config.BEGINDATE+"~"+endDate+"注册客户客户列表内容";
-				email.doSendHtmlEmailWithAttachment(subject, sendHtml,new File(pathName));
+			    email.doSendHtmlEmailWithAttachmentToMultiplayer(subject, sendHtml,new File(pathName));
 				//修改 当前 时间为 下次的 开始时间
 				Config.modifyBeginDate(endDate);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-		/*for (Map<String, Object> map : list) {
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				System.out.print(entry.getKey()+":"+entry.getValue()+"|");
-			}
-			System.out.println("");
-		}*/
 	}
 	
 	
 	public static void main(String[] args) {
-		ctx = new ClassPathXmlApplicationContext(new String[] { "conf/spring/spring-*.xml" });
+		ctx = new ClassPathXmlApplicationContext(new String[] { "spring/spring-*.xml" });
 		new Test();
 	}
 	

@@ -21,6 +21,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
+import org.apache.commons.lang.StringUtils;
+
 public class JavaEmail {
 
 	private MimeMessage message;
@@ -31,6 +33,7 @@ public class JavaEmail {
     private String sender_username = "";
     private String sender_password = "";
     private String mail_receiver = "";//接收者
+    private String mail_cc = "";//抄送给
 
     private Properties properties = new Properties();
     
@@ -43,6 +46,7 @@ public class JavaEmail {
 			this.sender_username = properties.getProperty("mail.sender.username");
 			this.sender_password = properties.getProperty("mail.sender.password");
 			this.mail_receiver = properties.getProperty("mail.receiver");
+			this.mail_cc = properties.getProperty("mail.cc");
    	 } catch (IOException e) {
    		 e.printStackTrace();
    	 }
@@ -50,8 +54,15 @@ public class JavaEmail {
         session.setDebug(debug);//开启后有调试信息
         message = new MimeMessage(session);
    }
-   
-   public void doSendHtmlEmail(String subject, String sendHtml){
+    //发送给多人
+    public void doSendHtmlEmailToMultiplayer(String subject, String sendHtml){
+    	String[] receiver = this.mail_receiver.split(",");
+ 	   for (String re : receiver) {
+ 		  doSendHtmlEmail(subject, sendHtml, re);
+ 	   }
+    }
+    
+   public void doSendHtmlEmail(String subject, String sendHtml,String receiver){
    	   try {
               // 发件人
               //InternetAddress from = new InternetAddress(sender_username);
@@ -60,8 +71,17 @@ public class JavaEmail {
               message.setFrom(from);
               
               // 收件人
-              InternetAddress to = new InternetAddress(mail_receiver);
+              InternetAddress to = new InternetAddress(receiver);
               message.setRecipient(Message.RecipientType.TO, to);//还可以有CC、BCC
+              //设置抄送人
+              if(StringUtils.isNotBlank(mail_cc)){
+            	  String[] cc = mail_cc.split(",");
+            	  InternetAddress[] addresses = new InternetAddress[cc.length];
+            	  for (int i = 0; i < cc.length; i++) {
+            		  addresses[i] = new InternetAddress(cc[i]);
+				}
+            	 message.setRecipients(Message.RecipientType.CC, addresses);
+              }
               
               // 邮件主题
               message.setSubject(subject);
@@ -92,15 +112,32 @@ public class JavaEmail {
           }
    }
    
-   public void doSendHtmlEmailWithAttachment(String subject, String sendHtml, File attachment) {
+ //发送给多人
+   public void doSendHtmlEmailWithAttachmentToMultiplayer(String subject,String sendHtml, File attachment){
+	   String[] receiver = this.mail_receiver.split(",");
+	   for (String re : receiver) {
+		doSendHtmlEmailWithAttachment(subject, sendHtml, attachment, re);
+	   }
+   }
+   
+   public void doSendHtmlEmailWithAttachment(String subject, String sendHtml, File attachment,String receiver) {
    	 try {
             // 发件人
             InternetAddress from = new InternetAddress(sender_username);
             message.setFrom(from);
 
             // 收件人
-            InternetAddress to = new InternetAddress(mail_receiver);
+            InternetAddress to = new InternetAddress(receiver);
             message.setRecipient(Message.RecipientType.TO, to);
+            //设置抄送人
+            if(StringUtils.isNotBlank(mail_cc)){
+          	  String[] cc = mail_cc.split(",");
+          	  InternetAddress[] addresses = new InternetAddress[cc.length];
+          	  for (int i = 0; i < cc.length; i++) {
+          		  addresses[i] = new InternetAddress(cc[i]);
+				}
+          	 message.setRecipients(Message.RecipientType.CC, addresses);
+            }
 
             // 邮件主题
             message.setSubject(subject);
